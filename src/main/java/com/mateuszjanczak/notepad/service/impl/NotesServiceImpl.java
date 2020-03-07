@@ -30,4 +30,24 @@ public class NotesServiceImpl implements NotesService {
     public ArrayList<Note> getAll() {
         return notes;
     }
+
+    public Note get(int id){
+        for (Note note : notes) {
+            if (note.getId() == id) {
+                return note;
+            }
+        }
+        return null;
+    }
+
+    public Note edit(NoteDto noteDto){
+        for (Note note : notes) {
+            if (note.getId() == Integer.parseInt(noteDto.getId())) {
+                note.setTitle(noteDto.getTitle());
+                note.setContent(noteDto.getContent());
+                return note;
+            }
+        }
+        return null;
+    }
 }

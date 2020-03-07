@@ -18,6 +18,20 @@ public class NotesApiController {
     private NotesService notesService;
 
     @CrossOrigin
+    @GetMapping
+    public ResponseEntity<ArrayList<Note>> getNotes(){
+        final ArrayList<Note> notes = notesService.getAll();
+        return new ResponseEntity<>(notes, HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Note> getNote(@PathVariable int id){
+        final Note note = notesService.get(id);
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @CrossOrigin
     @PostMapping(value = "/add")
     public ResponseEntity<Note> addNote(@RequestBody NoteDto noteDto){
         final Note note = notesService.add(noteDto);
@@ -25,9 +39,9 @@ public class NotesApiController {
     }
 
     @CrossOrigin
-    @GetMapping(value = "")
-    public ResponseEntity<ArrayList<Note>> getNotes(){
-        final ArrayList<Note> notes = notesService.getAll();
-        return new ResponseEntity<>(notes, HttpStatus.OK);
+    @PostMapping(value = "/edit")
+    public ResponseEntity<Note> editNote(@RequestBody NoteDto noteDto){
+        final Note note = notesService.edit(noteDto);
+        return new ResponseEntity<>(note, HttpStatus.OK);
     }
 }

@@ -2,11 +2,19 @@ package com.mateuszjanczak.notepad.domain.dto;
 import java.io.Serializable;
 
 public class NoteDto implements Serializable {
-    private int id;
+    private String id;
     private String title;
     private String content;
 
     public NoteDto() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
