@@ -40,14 +40,24 @@ public class NotesServiceImpl implements NotesService {
         return null;
     }
 
-    public Note edit(NoteDto noteDto){
+    @Override
+    public Note edit(NoteDto noteDto, int id){
         for (Note note : notes) {
-            if (note.getId() == Integer.parseInt(noteDto.getId())) {
+            if (note.getId() == id) {
                 note.setTitle(noteDto.getTitle());
                 note.setContent(noteDto.getContent());
                 return note;
             }
         }
         return null;
+    }
+
+    @Override
+    public void remove(int id) {
+        for (Note note : notes) {
+            if (note.getId() == id) {
+                notes.remove(note);
+            }
+        }
     }
 }

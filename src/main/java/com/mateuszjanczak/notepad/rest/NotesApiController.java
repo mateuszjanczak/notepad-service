@@ -32,16 +32,23 @@ public class NotesApiController {
     }
 
     @CrossOrigin
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/")
     public ResponseEntity<Note> addNote(@RequestBody NoteDto noteDto){
         final Note note = notesService.add(noteDto);
         return new ResponseEntity<>(note, HttpStatus.OK);
     }
 
     @CrossOrigin
-    @PostMapping(value = "/edit")
-    public ResponseEntity<Note> editNote(@RequestBody NoteDto noteDto){
-        final Note note = notesService.edit(noteDto);
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Note> editNote(@RequestBody NoteDto noteDto, @PathVariable int id){
+        final Note note = notesService.edit(noteDto, id);
         return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @CrossOrigin
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> removeNote(@PathVariable int id){
+        notesService.remove(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
