@@ -15,6 +15,16 @@ public class NotesServiceImpl implements NotesService {
 
     public NotesServiceImpl() {
         this.notes = new ArrayList<>();
+        for(int i=0; i<10; i++){
+            generate();
+        }
+    }
+
+    private void generate(){
+        NoteDto noteDto = new NoteDto();
+        noteDto.setTitle("Heading");
+        noteDto.setContent("Lorem ipsum...");
+        add(noteDto);
     }
 
     @Override
