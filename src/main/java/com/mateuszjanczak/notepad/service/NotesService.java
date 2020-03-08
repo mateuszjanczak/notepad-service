@@ -11,5 +11,5 @@ public interface NotesService {
     ArrayList<Note> getAll();
     Note get(int id);
     Note edit(NoteDto noteDto, int id);
-    void remove(int id);
+    Integer remove(int id);
 }

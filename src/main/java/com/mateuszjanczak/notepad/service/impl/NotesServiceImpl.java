@@ -53,11 +53,13 @@ public class NotesServiceImpl implements NotesService {
     }
 
     @Override
-    public void remove(int id) {
+    public Integer remove(int id) {
         for (Note note : notes) {
             if (note.getId() == id) {
                 notes.remove(note);
+                return id;
             }
         }
+        return null;
     }
 }

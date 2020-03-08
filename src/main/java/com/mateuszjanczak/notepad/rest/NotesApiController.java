@@ -47,8 +47,8 @@ public class NotesApiController {
 
     @CrossOrigin
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> removeNote(@PathVariable int id){
-        notesService.remove(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Integer> removeNote(@PathVariable int id){
+        int removedId = notesService.remove(id);
+        return new ResponseEntity<>(removedId, HttpStatus.OK);
     }
 }
