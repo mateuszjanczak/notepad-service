@@ -1,30 +1,11 @@
 package com.mateuszjanczak.notepad.users.service;
 
-import com.mateuszjanczak.notepad.users.dao.UserDao;
-import com.mateuszjanczak.notepad.users.model.User;
-import org.springframework.stereotype.Service;
+import com.mateuszjanczak.notepad.users.entity.User;
 
-import java.util.ArrayList;
+public interface UserService {
 
-@Service
-public class UserService {
-
-    private UserDao userRepository;
-
-    public UserService(UserDao userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public Iterable<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public void save(User user) {
-        userRepository.save(user);
-    }
+    User findByUsername(String username);
+    User save(User user);
+    User loadUserByUsername(String username);
 
 }
