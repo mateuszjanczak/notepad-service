@@ -1,22 +1,22 @@
 package com.mateuszjanczak.notepad.notes.web;
 
-import com.mateuszjanczak.notepad.exception.Error;
+import com.mateuszjanczak.notepad.dto.ErrorResponse;
 import com.mateuszjanczak.notepad.notes.exception.NoteNotFoundException;
+import com.mateuszjanczak.notepad.notes.web.rest.NoteController;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 
-@Controller
+@ControllerAdvice(assignableTypes  = NoteController.class)
 public class NoteErrorController {
 
-    @ExceptionHandler(value = {NoteNotFoundException.class})
+    @ExceptionHandler(value = NoteNotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ResponseBody
-    public Error handleNoteNotFoundException(NoteNotFoundException ex, WebRequest request) {
-        return new Error(HttpStatus.NOT_FOUND, "The note doesn't exist");
+    public ErrorResponse handleNoteNotFoundException(NoteNotFoundException ex) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND, "The note doesn't exist: id = " + ex.getMessage());
     }
 
 }

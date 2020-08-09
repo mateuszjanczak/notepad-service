@@ -1,6 +1,6 @@
 package com.mateuszjanczak.notepad.security;
 
-import com.mateuszjanczak.notepad.exception.Error;
+import com.mateuszjanczak.notepad.dto.ErrorResponse;
 import com.mateuszjanczak.notepad.users.entity.User;
 import com.mateuszjanczak.notepad.users.service.UserService;
 import com.mateuszjanczak.notepad.users.web.AuthErrorController;
@@ -11,6 +11,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -45,15 +46,23 @@ public class JwtFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 response.addHeader(JwtProvider.AUTHORIZATION_HEADER, jwtProvider.createToken(user.getUsername()));
-            } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException ex){
-                Error error = authErrorController.handleJwtException(ex);
-                response.setStatus(error.getErrorCode());
-                response.setContentType("application/json");
-                response.getOutputStream().write(error.toJson().getBytes());
+            } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException ex) {
+                ErrorResponse errorResponse = authErrorController.handleJwtException(ex);
+                setErrorResponse(response, errorResponse);
+                return;
+            } catch (UsernameNotFoundException ex) {
+                ErrorResponse errorResponse = authErrorController.handleUsernameNotFoundException(ex);
+                setErrorResponse(response, errorResponse);
                 return;
             }
         }
         filterChain.doFilter(request, response);
+    }
+
+    private void setErrorResponse(HttpServletResponse response, ErrorResponse errorResponse) throws IOException {
+        response.setStatus(errorResponse.getErrorCode());
+        response.setContentType("application/json");
+        response.getOutputStream().write(errorResponse.toJson().getBytes());
     }
 
     private boolean checkHeader(String header) {

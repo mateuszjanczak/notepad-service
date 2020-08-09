@@ -1,13 +1,13 @@
-package com.mateuszjanczak.notepad.exception;
+package com.mateuszjanczak.notepad.dto;
 
 import org.springframework.http.HttpStatus;
 import java.util.List;
 
-public class ValidationError extends Error {
+public class ValidationErrorResponse extends ErrorResponse {
 
     private List<String> fieldsErrorList;
 
-    public ValidationError(HttpStatus status, String message, List<String> fieldsErrorList) {
+    public ValidationErrorResponse(HttpStatus status, String message, List<String> fieldsErrorList) {
         super(status, message);
         this.fieldsErrorList = fieldsErrorList;
     }

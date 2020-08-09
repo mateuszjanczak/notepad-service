@@ -1,14 +1,14 @@
-package com.mateuszjanczak.notepad.exception;
+package com.mateuszjanczak.notepad.dto;
 
 import org.springframework.http.HttpStatus;
 
-public class Error extends RuntimeException {
+public class ErrorResponse {
 
     private int errorCode;
     private String errorName;
     private String errorMessage;
 
-    public Error(HttpStatus status, String message) {
+    public ErrorResponse(HttpStatus status, String message) {
         this.errorCode = status.value();
         this.errorName = status.name();
         this.errorMessage = message;

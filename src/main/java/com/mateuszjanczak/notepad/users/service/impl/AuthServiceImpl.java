@@ -7,6 +7,7 @@ import com.mateuszjanczak.notepad.users.dto.RegisterRequest;
 import com.mateuszjanczak.notepad.users.entity.Role;
 import com.mateuszjanczak.notepad.users.entity.RoleName;
 import com.mateuszjanczak.notepad.users.entity.User;
+import com.mateuszjanczak.notepad.users.exception.UsernameIsAlreadyTakenException;
 import com.mateuszjanczak.notepad.users.repository.RoleRepository;
 import com.mateuszjanczak.notepad.users.service.AuthService;
 import com.mateuszjanczak.notepad.users.service.UserService;
@@ -47,6 +48,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public User register(RegisterRequest registerRequest) {
+        String username = registerRequest.getUsername();
+        if(userService.findByUsername(username).isPresent()) throw new UsernameIsAlreadyTakenException(username);
         User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -58,6 +61,6 @@ public class AuthServiceImpl implements AuthService {
 
     public User getLoggedUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userService.findByUsername(user.getUsername());
+        return userService.loadUserByUsername(user.getUsername());
     }
 }

@@ -1,6 +1,6 @@
 package com.mateuszjanczak.notepad.notes.service.impl;
 
-import com.mateuszjanczak.notepad.exception.Error;
+import com.mateuszjanczak.notepad.users.exception.InsufficientPermissionsException;
 import com.mateuszjanczak.notepad.notes.dto.NoteRequest;
 import com.mateuszjanczak.notepad.notes.entity.Note;
 import com.mateuszjanczak.notepad.notes.exception.NoteNotFoundException;
@@ -9,7 +9,6 @@ import com.mateuszjanczak.notepad.notes.service.NoteService;
 import com.mateuszjanczak.notepad.users.entity.User;
 import com.mateuszjanczak.notepad.users.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public class NoteServiceImpl implements NoteService {
     public Note edit(NoteRequest noteRequest, String id) {
         Note note = this.findById(id);
         User user = authService.getLoggedUser();
-        if(!note.getUser().equals(user)) throw new Error(HttpStatus.FORBIDDEN, "You dont have permissions");
+        if(isUnauthorized(note, user)) throw new InsufficientPermissionsException();
         note.setTitle(noteRequest.getTitle());
         note.setContent(noteRequest.getContent());
         return noteRepository.save(note);
@@ -57,8 +56,12 @@ public class NoteServiceImpl implements NoteService {
     public void delete(String id) {
         Note note = this.findById(id);
         User user = authService.getLoggedUser();
-        if(!note.getUser().equals(user)) throw new Error(HttpStatus.FORBIDDEN, "You dont have permissions");
+        if(isUnauthorized(note, user)) throw new InsufficientPermissionsException();
         noteRepository.delete(note);
+    }
+
+    private boolean isUnauthorized(Note note, User user) {
+        return !note.getUser().equals(user);
     }
 
     /*ArrayList<Note> notes;
