@@ -5,11 +5,10 @@ import com.mateuszjanczak.notepad.security.JwtToken;
 import com.mateuszjanczak.notepad.users.dto.LoginRequest;
 import com.mateuszjanczak.notepad.users.dto.RegisterRequest;
 import com.mateuszjanczak.notepad.users.entity.Role;
-import com.mateuszjanczak.notepad.users.entity.RoleName;
 import com.mateuszjanczak.notepad.users.entity.User;
 import com.mateuszjanczak.notepad.users.exception.UsernameIsAlreadyTakenException;
-import com.mateuszjanczak.notepad.users.repository.RoleRepository;
 import com.mateuszjanczak.notepad.users.service.AuthService;
+import com.mateuszjanczak.notepad.users.service.RoleService;
 import com.mateuszjanczak.notepad.users.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -28,15 +26,15 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
-    private final RoleRepository roleRepository;
     private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtProvider jwtProvider, RoleRepository roleRepository, UserService userService) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, JwtProvider jwtProvider, UserService userService, RoleService roleService) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.jwtProvider = jwtProvider;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.userService = userService;
     }
 
@@ -54,8 +52,8 @@ public class AuthServiceImpl implements AuthService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setEmail(registerRequest.getEmail());
-        Optional<Role> roleUser = roleRepository.findByName(RoleName.role_user);
-        user.setRoles(Collections.singletonList(roleUser.orElseGet(() -> roleRepository.save(new Role(RoleName.role_user)))));
+        Role roleUser = roleService.getRoleUser();
+        user.setRoles(Collections.singletonList(roleUser));
         return userService.save(user);
     }
 
