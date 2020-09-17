@@ -1,24 +1,24 @@
 # notepad-service
-----
-Serwis do przechowywania notatek.
+Service for storing notes.
 
-### Wymagane oprogramowanie
+### Requirements
 * JDK 1.8 or later
-* Gradle 4+ or Maven 3.2+
 
+### Getting started
 
-### Uruchamianie
-Gradle: `./gradlew bootRun`
+#### Step 1: Clone this Repository
+`git clone git@github.com:mateuszjanczak/notepad-service.git`
 
-Maven: `./mvnw spring-boot:run`
+#### Step 2: Build and run with Maven Wrapper
+`./mvnw spring-boot:run`
 
-### Endpointy
+### Endpoints
+
+#### All notes
 ```
-# Pobieranie notatek
-
 GET http://localhost:8080/api/notes
 
-Zwracany
+Response
 [
     {
       "id": 62132,
@@ -31,56 +31,59 @@ Zwracany
       "content": "Notatka 2"
     }
 ]
+```
 
-# Pobieranie pojedynczej notatki
-
+#### Single note
+```
 GET http://localhost:8080/api/notes/{id}
 
-Zwracany
+Response
 {
   "id": 62132,
   "title": "Tytuł",
   "content": "Notatka 1"
 }
+```
 
-# Dodawanie notatki
-
+#### Add a note
+```
 POST http://localhost:8080/api/notes
 Content-Type: application/json
+
+Request
 {
   "title": "Tytuł",
   "content": "Notatka"
 }
 
-Zwracany
+Response
 {
   "id": 62132,
   "title": "Tytuł",
   "content": "Notatka"
 }
+```
 
-# Edytowanie notatki
-
+#### Edit the note
+```
 PATCH http://localhost:8080/api/notes/{id}
 Content-Type: application/json
+
+Request
 {
   "title": "Tytuł",
   "content": "Edytowana notatka"
 }
 
-Zwracany
+Response
 {
   "id": 62132,
   "title": "Tytuł",
   "content": "Edytowana notatka"
 }
+```
 
-# Usuwanie notatki
-
+#### Remove the note
+```
 DELETE http://localhost:8080/api/notes/{id}
-Content-Type: raw
-{
-    id
-}
-
 ```
