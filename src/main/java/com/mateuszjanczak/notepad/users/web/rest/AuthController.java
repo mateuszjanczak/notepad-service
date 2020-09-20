@@ -11,10 +11,7 @@ import com.mateuszjanczak.notepad.users.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -30,6 +27,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
         JwtToken token = authService.login(loginRequest);
@@ -37,6 +35,7 @@ public class AuthController {
         return new ResponseEntity<>(token.toResponse(), HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
         User user = authService.register(registerRequest);
