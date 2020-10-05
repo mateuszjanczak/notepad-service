@@ -20,7 +20,7 @@ public class Note {
     private String title;
 
     @NotNull
-    @Column(name = "CONTENT")
+    @Column(name = "CONTENT", columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne
