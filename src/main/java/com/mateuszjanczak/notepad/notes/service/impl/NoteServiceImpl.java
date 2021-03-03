@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteServiceImpl implements NoteService {
@@ -27,12 +28,14 @@ public class NoteServiceImpl implements NoteService {
 
     @Override
     public List<Note> findAll() {
-        return noteRepository.findAll();
+        User user = authService.getLoggedUser();
+        return noteRepository.findAll().stream().filter(note -> note.getUser().equals(user)).collect(Collectors.toList());
     }
 
     @Override
     public Note findById(String id) {
-        return noteRepository.findById(id).orElseThrow(() -> new NoteNotFoundException(id));
+        User user = authService.getLoggedUser();
+        return noteRepository.findById(id).filter(note -> note.getUser().equals(user)).orElseThrow(() -> new NoteNotFoundException(id));
     }
 
     @Override
