@@ -68,11 +68,11 @@ public class DataLoader implements ApplicationRunner {
             note4.setUser(user);
 
             Note note5 = new Note();
-            note4.setTitle("Konto testowe");
-            note4.setContent("Jesteś zalogowany na koncie demonstracyjnym!");
-            note4.setUser(user);
+            note5.setTitle("Konto testowe");
+            note5.setContent("Jesteś zalogowany na koncie demonstracyjnym!");
+            note5.setUser(user);
 
-            noteRepository.saveAll(Arrays.asList(note1, note2, note3, note4));
+            noteRepository.saveAll(Arrays.asList(note1, note2, note3, note4, note5));
         }
     }
 }
