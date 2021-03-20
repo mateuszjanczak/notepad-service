@@ -1,17 +1,17 @@
 package com.mateuszjanczak.notepad.users.dto;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 public class RegisterRequest {
 
-    @NotNull(message = "Email cannot be null")
-    private String email;
-
-    @NotNull(message = "Username cannot be null")
+    @NotBlank(message = "Username cannot be empty")
     private String username;
 
-    @NotNull(message = "Password cannot be null")
+    @NotBlank(message = "Password cannot be empty")
     private String password;
+
+    @NotBlank(message = "Email cannot be empty")
+    private String email;
 
     public RegisterRequest() {
     }

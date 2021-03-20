@@ -1,8 +1,13 @@
 package com.mateuszjanczak.notepad.users.dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class LoginRequest {
 
+    @NotBlank(message = "Username cannot be empty")
     private String username;
+
+    @NotBlank(message = "Password cannot be empty")
     private String password;
 
     public String getUsername() {

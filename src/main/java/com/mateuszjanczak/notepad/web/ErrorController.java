@@ -2,6 +2,7 @@ package com.mateuszjanczak.notepad.web;
 
 import com.mateuszjanczak.notepad.dto.ErrorResponse;
 import com.mateuszjanczak.notepad.dto.ValidationErrorResponse;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +29,7 @@ public class ErrorController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public ValidationErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        List<String> fieldsErrors = ex.getBindingResult().getFieldErrors().stream().map(fieldError -> fieldError.getField() + " : " + fieldError.getDefaultMessage()).collect(Collectors.toList());
+        List<String> fieldsErrors = ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList());
         String errorMessage = "Object validation failed. Check fields errors.";
         return new ValidationErrorResponse(HttpStatus.BAD_REQUEST, errorMessage, fieldsErrors);
     }
